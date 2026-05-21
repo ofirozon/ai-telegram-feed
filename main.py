@@ -207,8 +207,9 @@ def main() -> None:
     for item in items:
         he = translate(item)
         if not he:
-            # mark as seen anyway so we don't retry forever on the same broken item
-            seen.add(item["id"])
+            # Transient failure (quota, rate limit, network). Don't mark seen —
+            # let the next run try again. MAX_AGE_HOURS will eventually evict
+            # any permanently broken item from the candidate list.
             continue
         if post_to_telegram(item, he):
             seen.add(item["id"])
