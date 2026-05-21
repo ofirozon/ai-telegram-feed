@@ -2,7 +2,11 @@ name: AI News -> Telegram
 
 on:
   schedule:
-    - cron: "0 * * * *"   # every hour, on the hour
+    # 3 runs per day at 08:00 / 13:00 / 19:00 Israel time (IDT, summer).
+    # GitHub Actions cron is UTC only; Israel = UTC+3 in summer, UTC+2 in winter,
+    # so in winter the posts will appear one hour earlier (07:00 / 12:00 / 18:00).
+    # Note: GitHub Actions schedules can be delayed by 5-15 minutes during peak load.
+    - cron: "0 5,10,16 * * *"
   workflow_dispatch:       # also runnable manually from the Actions tab
 
 permissions:
@@ -32,7 +36,7 @@ jobs:
           TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
           GEMINI_API_KEY:     ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL:       "gemini-2.5-flash-lite"
-          MAX_ITEMS_PER_RUN:  "5"
+          MAX_ITEMS_PER_RUN:  "1"
           MAX_AGE_HOURS:      "48"
         run: python main.py
 
