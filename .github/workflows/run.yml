@@ -1,0 +1,46 @@
+name: AI News -> Telegram
+
+on:
+  schedule:
+    - cron: "0 * * * *"   # every hour, on the hour
+  workflow_dispatch:       # also runnable manually from the Actions tab
+
+permissions:
+  contents: write          # needed so the job can commit seen.json back
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Run publisher
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID:   ${{ secrets.TELEGRAM_CHAT_ID }}
+          GEMINI_API_KEY:     ${{ secrets.GEMINI_API_KEY }}
+          MAX_ITEMS_PER_RUN:  "5"
+          MAX_AGE_HOURS:      "48"
+        run: python main.py
+
+      - name: Commit updated seen.json
+        run: |
+          if [ -n "$(git status --porcelain seen.json)" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add seen.json
+            git commit -m "chore: update seen state"
+            git push
+          fi

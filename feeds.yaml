@@ -1,0 +1,32 @@
+# RSS feeds the publisher will read.
+# Add, remove, or comment out feeds as you like — just keep the structure.
+feeds:
+  - name: OpenAI
+    url: https://openai.com/blog/rss.xml
+
+  - name: Google DeepMind
+    url: https://deepmind.google/blog/rss.xml
+
+  - name: Hugging Face
+    url: https://huggingface.co/blog/feed.xml
+
+  - name: MIT Technology Review – AI
+    url: https://www.technologyreview.com/topic/artificial-intelligence/feed
+
+  - name: TechCrunch AI
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
+
+  - name: The Verge AI
+    url: https://www.theverge.com/ai-artificial-intelligence/rss/index.xml
+
+  - name: Ars Technica AI
+    url: https://arstechnica.com/ai/feed/
+
+  - name: VentureBeat AI
+    url: https://venturebeat.com/category/ai/feed/
+
+  - name: Wired AI
+    url: https://www.wired.com/feed/tag/ai/latest/rss
+
+  - name: arXiv cs.AI
+    url: https://export.arxiv.org/rss/cs.AI
